@@ -12,8 +12,9 @@ def text_to_speech(character, text, output_path):
         "text": text,
         "model_id": "eleven_multilingual_v2",
         "voice_settings": {
-            "stability": 0.4,
-            "similarity_boost": 0.85
+            "stability": 0.5,
+            "similarity_boost": 0.8,
+            'style': 0.15
         }
     }
     response = requests.post(url, json=payload, headers=headers)

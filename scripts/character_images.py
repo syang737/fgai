@@ -25,7 +25,7 @@ def create_character_image_clip(character_image_path, audio_file_path, start_tim
     duration = AudioFileClip(audio_file_path).duration
     
     image_clip = (
-        ImageClip(character_image_path, transparent=True)
+        ImageClip(character_image_path)
         .set_start(start_time)
         .set_duration(duration)
         .resize(height=height)
