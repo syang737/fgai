@@ -1,8 +1,8 @@
 from scripts.script_generation import generate_conversation
 from scripts.tts_conversion import text_to_speech
 from scripts.character_images import generate_character_image_clips
-from scripts.caption_generation import generate_highlighted_captions
-from scripts.audio_video_stitching import combine_audio_video
+from scripts.caption_generation import generate_highlighted_captions    
+from scripts.audio_video_stitching import combine_audio_video, combine_audio_video_no_captions
 import os
 from moviepy.editor import TextClip
 import moviepy.config as mpy_conf
@@ -60,11 +60,11 @@ def main():
 
     logging.info("Generating character image clips.")
     image_clips = generate_character_image_clips(conversation_lines, IMAGE_MAP)
-    logging.info("Generating highlighted captions.")
-    caption_clips = generate_highlighted_captions(conversation_lines)
+    # logging.info("Generating highlighted captions.")
+    # caption_clips = generate_highlighted_captions(conversation_lines)
 
     logging.info("Combining audio, video, images, and captions.")
-    combine_audio_video(VIDEO_PATH, audio_files, image_clips, caption_clips, FINAL_VIDEO_PATH)
+    combine_audio_video_no_captions(VIDEO_PATH, audio_files, image_clips, FINAL_VIDEO_PATH)
     logging.info(f"✅ Video created: {FINAL_VIDEO_PATH}")
 
 if __name__ == "__main__":

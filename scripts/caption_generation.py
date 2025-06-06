@@ -14,29 +14,6 @@ def normalize_text(text):
     text = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', text)
     return text
 
-def _create_textclip_safe(args):
-    # Helper for multiprocessing timeout
-    chunk_text, font_size, normal_color, video_height, chunk_start, chunk_duration = args
-    try:
-        clip = (
-            TextClip(
-                txt=chunk_text,
-                fontsize=font_size,
-                font="DejaVu-Sans",
-                color=normal_color,
-                stroke_color="black",
-                stroke_width=2,
-                size=(1000, None),
-                method="caption"
-            )
-            .set_start(chunk_start)
-            .set_duration(chunk_duration)
-            # DO NOT call .set_position() here!
-        )
-        return clip
-    except Exception as e:
-        return e
-
 def generate_highlighted_captions(conversation_lines, font_size=70, normal_color="white", highlight_color="yellow", video_height=1920, timeout=10):
     """
     Generates TextClips for subtitles, displaying three words at a time, with duration weighted by character count and an enlarging animation.

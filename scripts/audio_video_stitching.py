@@ -16,3 +16,19 @@ def combine_audio_video(bg_video_path, audio_files, image_clips, caption_clips, 
 
     # Export final video
     final_video.write_videofile(output_path, codec="libx264", audio_codec="aac")
+
+def combine_audio_video_no_captions(bg_video_path, audio_files, image_clips, output_path):
+    """
+    Combine background video, audio, and image overlays, but no captions.
+    """
+    video = VideoFileClip(bg_video_path)
+
+    audio_clips = [AudioFileClip(a) for a in audio_files]
+    total_audio = concatenate_audioclips(audio_clips)
+
+    video = video.set_audio(total_audio).subclip(0, total_audio.duration)
+    video = video.resize(height=1920).crop(x_center=video.w / 2, width=1080)
+
+    final_video = CompositeVideoClip([video] + image_clips, size=(1080, 1920))
+
+    final_video.write_videofile(output_path, codec="libx264", audio_codec="aac")
