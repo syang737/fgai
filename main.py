@@ -7,6 +7,8 @@ import os
 from moviepy.editor import TextClip
 import moviepy.config as mpy_conf
 import logging
+import random
+import datetime
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,6 +31,20 @@ FINAL_VIDEO_PATH = "final_videos/final_output.mp4"
 def main():
     logging.info("Starting main process.")
     os.makedirs(AUDIO_DIR, exist_ok=True)
+    os.makedirs("final_videos", exist_ok=True)
+
+    # Pick a random parkour video from the pool
+    parkour_video_dir = "assets/parkour_videos"
+    video_files = [os.path.join(parkour_video_dir, f) for f in os.listdir(parkour_video_dir) if f.endswith(('.mp4', '.mov', '.avi'))]
+    if not video_files:
+        raise FileNotFoundError("No parkour videos found in the directory.")
+    selected_video = random.choice(video_files)
+    logging.info(f"Selected parkour video: {selected_video}")
+
+    # Generate unique output filename with timestamp
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_video_path = f"final_videos/final_output_{timestamp}.mp4"
+
     convo = generate_conversation()
     logging.info(f"Generated conversation with {len(convo)} lines.")
 
@@ -64,8 +80,8 @@ def main():
     # caption_clips = generate_highlighted_captions(conversation_lines)
 
     logging.info("Combining audio, video, images, and captions.")
-    combine_audio_video_no_captions(VIDEO_PATH, audio_files, image_clips, FINAL_VIDEO_PATH)
-    logging.info(f"✅ Video created: {FINAL_VIDEO_PATH}")
+    combine_audio_video_no_captions(selected_video, audio_files, image_clips, output_video_path)
+    logging.info(f"✅ Video created: {output_video_path}")
 
 if __name__ == "__main__":
     main()
